@@ -10,7 +10,8 @@ class SizeConfig {
   static double screenHeight;
   static double defaultSize;
   static Orientation orientation;
-  static String baseUrl = "http://192.168.1.104:45457";
+  static String baseUrl =
+      "https://hagglex-backend-staging.herokuapp.com/graphql";
 
   static double xlargText = 30;
   static double largText = 25;

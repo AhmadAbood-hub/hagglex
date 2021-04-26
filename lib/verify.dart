@@ -2,14 +2,25 @@ import 'package:flutter/material.dart';
 import './configuration.dart';
 import './register.dart';
 import './complete.dart';
+import 'package:email_auth/email_auth.dart';
 
 class Verify extends StatefulWidget {
+  final String email;
+
+  Verify({this.email});
+
   @override
   _VerifyState createState() => _VerifyState();
 }
 
+final _codeController = TextEditingController();
+
 class _VerifyState extends State<Verify> {
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+    sendOtp(widget.email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +128,7 @@ class _VerifyState extends State<Verify> {
                                   left: SizeConfig.xlargText,
                                   right: SizeConfig.xlargText),
                               child: TextFormField(
+                                  controller: _codeController,
                                   style: TextStyle(color: Colors.black),
                                   decoration: InputDecoration(
                                       enabledBorder: UnderlineInputBorder(
@@ -155,10 +167,8 @@ class _VerifyState extends State<Verify> {
                                       borderRadius: BorderRadius.circular(6)),
                                   color: PrimaryColor,
                                   onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                Complete()));
+                                    verify(widget.email, _codeController.text,
+                                        context);
                                   },
                                   child: Text(
                                     "VERIFY ME",
@@ -212,5 +222,19 @@ class _VerifyState extends State<Verify> {
         ),
       ),
     );
+  }
+}
+
+void verify(String email, String code, BuildContext context) {
+  if (EmailAuth.validate(receiverMail: email, userOTP: code))
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => Complete()));
+}
+
+void sendOtp(String email) async {
+  EmailAuth.sessionName = "Company Name";
+  bool result = await EmailAuth.sendOtp(receiverMail: email);
+  if (result) {
+    print(result.toString());
   }
 }
