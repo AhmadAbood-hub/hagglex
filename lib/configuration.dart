@@ -30,6 +30,7 @@ class SizeConfig {
   static double getScreenHeight() {
     double screenHeight = SizeConfig.screenHeight;
     return screenHeight;
+    //
   }
 
   static double getScreenWidth() {
